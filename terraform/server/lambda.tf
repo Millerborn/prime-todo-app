@@ -72,13 +72,13 @@ resource "aws_iam_policy" "lambda_policy" {
                 "logs:CreateLogStream",
                 "logs:CreateLogGroup"
             ],
-            "Resource": "arn:aws:logs:us-east-1:${var.account_id}:log-group:/aws/lambda/${var.lambda_function_name}:*"
+            "Resource": "arn:aws:logs:us-east-1:${var.aws_account_id}:log-group:/aws/lambda/${var.lambda_function_name}:*"
         },
         {
             "Sid": "VisualEditor2",
             "Effect": "Allow",
             "Action": "logs:PutLogEvents",
-            "Resource": "arn:aws:logs:us-east-1:${var.account_id}:log-group:/aws/lambda/${var.lambda_function_name}:*:*"
+            "Resource": "arn:aws:logs:us-east-1:${var.aws_account_id}:log-group:/aws/lambda/${var.lambda_function_name}:*:*"
         }
     ]
 }

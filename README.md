@@ -1,25 +1,90 @@
-# How To Build a Todo App with React, TypeScript, NodeJS, and MongoDB
+# Prime TODO App + AWS Infrastructure
 
-In this tutorial, we will be using TypeScript on both sides (server and client) to build a Todo App from scratch with React, NodeJS, Express, and MongoDB.
+This project allows anyone who is interested in learning about and deploying AWS infrastructure to do so.
 
-So, let's start by planning the API.
+This project will create a static S3 Website that interacts with a NodeJs Lambda function and a DynamoDB database.
 
-[Read the article](https://www.ibrahima-ndaw.com/fr/blog/advanced-typescript-cheat-sheet/)
+## Prerequisites
 
-- [API with NodeJS, Express, MongoDB and TypeScript](#api-with-nodejs-express-mongodb-and-typescript)
-  - [Setting up](#setting-up)
-  - [Create a Todo Type](#create-a-todo-type)
-  - [Create a Todo Model](#create-a-todo-model)
-  - [Create API controllers](#create-api-controllers)
-    - [Get, Add, Update and Delete Todos](#get-add-update-and-delete-todos)
-  - [Create API routes](#create-api-routes)
-  - [Create a Server](#create-a-server)
-- [Client-side with React and TypeScript](#client-side-with-react-and-typescript)
-  - [Setting up](#setting-up-1)
-  - [Create a Todo Type](#create-a-todo-type-1)
-  - [Fetch data from the API](#fetch-data-from-the-api)
-  - [Create the components](#create-the-components)
-    - [Add Todo Form](#add-todo-form)
-    - [Display a Todo](#display-a-todo)
-  - [Fetch and Display data](#fetch-and-display-data)
-- [Resources](#resources)
+Before you begin, ensure you have met the following requirements:
+
+* You have an active AWS account appropriate privileges
+* The `aws_access_key_id` and `aws_secret_access_key` exist in your /Users/user/.aws/credentials file
+* You have installed the latest version of `aws cli`
+  - <https://formulae.brew.sh/formula/awscli>
+* You have installed the latest version of `terraform`
+  - <https://formulae.brew.sh/formula/terraform>
+* You have installed the latest version of `yarn`
+  - <https://formulae.brew.sh/formula/yarn>
+
+## Installing
+
+To install and setup the Client and Server code, follow these steps:
+
+Linux and macOS:
+```
+cd client/
+yarn install
+
+cd server/
+npm install
+zip -r ./server-lambda.zip . # this creates a zip file needed by terraform
+```
+
+To install and setup the Client and Server Infrastructure, follow these steps:
+
+Linux and macOS:
+```
+cd terraform/client/
+terraform init
+add variables in variables.tf
+
+cd terraform/server/
+terraform init
+add variables in variables.tf
+```
+
+## Building
+
+To create the AWS infrastructure, follow these steps:
+
+Linux and macOS:
+```
+cd terraform/client/
+terraform plan # verify changes
+terraform apply # create resources in AWS
+
+cd terraform/server/
+terraform plan # verify changes
+terraform apply # create resources in AWS
+Terraform will output the api_gateway_invoke_url - this must be added to the client/src/API.ts file as the `apiGatewayUrl` variable
+```
+
+## Deploying
+
+To deploy Client and NodeJS changes, follow these steps:
+
+Linux and macOS:
+```
+cd client/
+modify lambda function name if needed in package.json
+npm run deploy # build project + sync build directory to S3 bucket
+
+cd server/
+modify lambda function name if needed in package.json
+npm run deploy # zip changes + deploy zip file to Lambda function
+```
+
+## Running the App Locally
+
+Requirements:
+
+* Terraform resources have been created
+* The API Gateway Invoke URL has been added to the client/src/API.ts file as the `apiGatewayUrl` variable
+
+To use the App locally, follow these steps:
+
+```
+cd client/
+npm start
+```
