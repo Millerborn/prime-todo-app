@@ -9,8 +9,12 @@ exports.handler = async (event, context, callback) => {
   // Convert incoming String data into an Object
   event.body = JSON.parse(event.body);
   
-  let requestType = event.body && event.body.requestType ? event.body.requestType : "not found";
   let data = event.body ? event.body : {};
+  let requestType = event.body && event.body.requestType ? event.body.requestType : null;
+
+  if (requestType === null) {
+    console.log('Request Was Null. event.body was:', event.body);
+  }
   
   // let params = { TableName: process.env.TABLE };
   let params = { TableName: 'PrimeTable' };
@@ -22,8 +26,6 @@ exports.handler = async (event, context, callback) => {
 
     // Create an Item
     if (requestType === 'create') {
-      console.log('Creating TODO');
-      
       params.Item = {
         'id' : uuid.v4(),
         'name': data.name,
@@ -118,13 +120,17 @@ exports.handler = async (event, context, callback) => {
     }
 
     if (response.body) {
-      response.statusCode = 200;
-      response.headers = {
-        "access-control-allow-origin": "*",
-        "content-type": "text/plain; charset=utf-8"
+      const finalResult = {
+        statusCode: 200,
+        headers: {
+            "Access-Control-Allow-Headers" : "Content-Type",
+            "Access-Control-Allow-Origin": "*",
+            "Access-Control-Allow-Methods": "*"
+        },
+        body: response.body,
       };
-      console.log('Returning Response:', response);
-      return response;
+      console.log('Returning Response:', finalResult);
+      return finalResult;
     } else {
       return "No response.body found. Error running function";
     }

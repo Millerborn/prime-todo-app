@@ -51,14 +51,17 @@ To create the AWS infrastructure, follow these steps:
 Linux and macOS:
 ```
 cd terraform/client
+# Add variables in the variables.tf file
 terraform plan # verify changes
 terraform apply # create resources in AWS
+# Note down the `website_endpoint` that is output
 
 cd terraform/server
+# Copy the `website_endpoint` and paste it into the `s3_bucket_website_endpoint` variable in the variables.tf file
 terraform plan # verify changes
 terraform apply # create resources in AWS
 # Terraform will output the api_gateway_invoke_url,
-# this must be added to the client/src/API.ts file as the `apiGatewayUrl` variable
+# This must be added to the client/src/API.ts file as the `apiGatewayUrl` variable
 ```
 
 ## Deploying
