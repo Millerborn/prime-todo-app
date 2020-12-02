@@ -5,8 +5,8 @@
   "main": "handler.js",
   "devDependencies": {},
   "scripts": {
-    "deploy": "zip -r ./server-lambda.zip . && aws lambda update-function-code --function-name  primeTodoLambda --zip-file fileb://server-lambda.zip",
-    "setup": "",
+    "build": "zip -r ./server-lambda.zip .",
+    "deploy": "npm run build && aws lambda update-function-code --function-name  primeTodoLambda --zip-file fileb://server-lambda.zip",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "",

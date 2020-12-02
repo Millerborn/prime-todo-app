@@ -13,7 +13,7 @@ Before you begin, ensure you have met the following requirements:
 * You have installed the latest version of `aws cli`
   - <https://formulae.brew.sh/formula/awscli>
 * You have installed the latest version of `terraform`
-  - <https://formulae.brew.sh/formula/terraform>
+  - <https://learn.hashicorp.com/tutorials/terraform/install-cli>
 * You have installed the latest version of `yarn`
   - <https://formulae.brew.sh/formula/yarn>
 
@@ -28,7 +28,7 @@ yarn install
 
 cd server
 npm install
-zip -r ./server-lambda.zip . # this creates a zip file needed by terraform
+npm run build # this creates a zip file needed by terraform
 ```
 
 To install and setup the Client and Server Infrastructure, follow these steps:
@@ -54,14 +54,15 @@ cd terraform/client
 # Add variables in the variables.tf file
 terraform plan # verify changes
 terraform apply # create resources in AWS
-# Note down the `website_endpoint` that is output
+# Copy the `website_endpoint` that gets output and paste it into the server variables.tf file
 
 cd terraform/server
-# Copy the `website_endpoint` and paste it into the `s3_bucket_website_endpoint` variable in the variables.tf file
 terraform plan # verify changes
 terraform apply # create resources in AWS
 # Terraform will output the api_gateway_invoke_url,
-# This must be added to the client/src/API.ts file as the `apiGatewayUrl` variable
+# Add this to the client/src/API.ts file as the `apiGatewayUrl` variable
+# The API Gateway can take 5 - 10 minutes to start working
+# If you see an error after 10 minutes it might be time to troubleshoot :)
 ```
 
 ## Deploying
@@ -71,8 +72,8 @@ To deploy Client and NodeJS changes, follow these steps:
 Linux and macOS:
 ```
 cd client
-# modify lambda function name if needed in package.json
-npm run deploy # build project + sync build directory to S3 bucket
+# modify s3 bucket name in the package.json deploy script
+npm run deploy # this will build the project and sync the build directory to your S3 bucket
 
 cd server
 # modify lambda function name if needed in package.json
@@ -85,6 +86,7 @@ Requirements:
 
 * Terraform resources have been created
 * The API Gateway Invoke URL has been added to the client/src/API.ts file as the `apiGatewayUrl` variable
+* As a note - the API Gateway can take 5 - 10 minutes to start working
 
 To use the App locally, follow these steps:
 

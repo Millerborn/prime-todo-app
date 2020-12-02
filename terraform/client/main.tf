@@ -3,15 +3,6 @@ provider "aws" {
     region = "us-east-1"
 }
 
-/*
-Frontend Infrastructure Code
-
-CloudFront CDN - Cloud Distribution Network
-S3 Bucket - Code
-*/
-
-# CloudFront CDN
-
 
 # S3 Bucket
 resource "aws_s3_bucket" "main" {
